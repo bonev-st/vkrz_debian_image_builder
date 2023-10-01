@@ -98,3 +98,4 @@ dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-dev.dtb
 DTC_FLAGS_vkrzg2l += -@
 dtb-$(CONFIG_ARCH_R9A07G044) += vkrzg2l.dtb
 subdir-$(CONFIG_ARCH_R9A07G044) += overlays
+
