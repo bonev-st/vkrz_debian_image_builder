@@ -1,6 +1,6 @@
 {{- $stage    := or .stage    "full" -}}
 {{- $arch     := or .arch     "arm64" -}}
-{{- $suite    := or .suite    "bookworm" -}}
+{{- $suite    := or .suite    "buster" -}}
 {{- $board    := or .board    "vkrzv2l" -}}
 {{- $locale   := or .locale   "en_US" -}}
 {{- $user     := or .user     "vkrz" -}}
@@ -28,8 +28,9 @@ actions:
         iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
         lsb-release, locales, dialog, file, usbutils, nano, less, tree,
         vim-tiny, screen, rsync, curl, wget, zip, unzip, cloud-guest-utils,
-        systemd-timesyncd, device-tree-compiler, fdisk, network-manager,
-        dosfstools, task-lxde-desktop
+        fdisk, network-manager, dosfstools, alsaplayer-common,
+        alsa-utils, v4l-utils,
+        task-lxde-desktop, epiphany-browser, ca-certificates, python3-opencv
     ]
 
   - action: run
@@ -46,6 +47,11 @@ actions:
     description: add a new user (will be in sudoers)
     chroot: true
     script: scripts/setup-user.sh {{ $user }} "{{ $pass }}"
+
+  - action: run
+    description: add a user to group video, audio, dialout, tty, disk, kmem, kvm
+    chroot: true
+    command: usermod -aG video,audio,dialout,tty,disk,kmem,kvm {{ $user }}
 
   - action: overlay
     description: command for extending rootfs partition
@@ -91,7 +97,7 @@ actions:
   - action: image-partition
     description: create a partitioned image
     imagename: {{ $image }}
-    imagesize: 2GB
+    imagesize: 2.0GB
     partitiontype: msdos
     mountpoints:
       - mountpoint: /
